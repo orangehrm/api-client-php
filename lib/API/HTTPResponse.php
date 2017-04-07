@@ -16,18 +16,11 @@
  * if not, write to the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA  02110-1301, USA
  */
+
 namespace Orangehrm\API;
 
-class Client
+
+class HTTPResponse
 {
-    /**
-     * Client constructor.
-     * @param string $companyDomain
-     */
-    public function __construct( $companyDomain)
-    {
-
-    }
-
 
 }
