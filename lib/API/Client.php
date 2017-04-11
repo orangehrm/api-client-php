@@ -18,16 +18,168 @@
  */
 namespace Orangehrm\API;
 
+use GuzzleHttp\Client as HttpClient;
+
 class Client
 {
     /**
-     * Client constructor.
-     * @param string $companyDomain
+     * @var Domain string
      */
-    public function __construct( $companyDomain)
+    private $domain = '';
+
+    /**
+     * @var Client Id int
+     */
+    private $clientId = 0;
+
+    /**
+     * @var Client Secret string
+     */
+    private $clientSecret = '';
+
+    /**
+     * @var Grant Type string
+     */
+    private $grantType = 'client_credentials';
+
+    /**
+     * @var version number string
+     */
+    private $version = 'v1';
+
+    private $httpClient = null;
+
+    /**
+     * Client constructor.
+     * @param $domain
+     * @param $clientId
+     * @param $clientSecret
+     */
+    public function __construct($domain, $clientId, $clientSecret)
     {
 
+        $this->setDomain($domain)
+            ->setClientId($clientId)
+            ->setClientSecret($clientSecret);
+
+        $this->setHttpClient(new HttpClient(['base_uri' => $domain]));
+    }
+
+    /**
+     * @return Domain
+     */
+    public function getDomain()
+    {
+        return $this->domain;
+    }
+
+    /**
+     * @param Domain $domain
+     * @return $this;
+     */
+    private function setDomain($domain)
+    {
+        $this->domain = $domain;
+        return $this;
+    }
+
+    /**
+     * @return Client
+     */
+    public function getClientId()
+    {
+        return $this->clientId;
+    }
+
+    /**
+     * @param Client $clientId
+     * @return $this;
+     */
+    private function setClientId($clientId)
+    {
+        $this->clientId = $clientId;
+        return $this;
+    }
+
+    /**
+     * @return Client
+     */
+    public function getClientSecret()
+    {
+        return $this->clientSecret;
+    }
+
+    /**
+     * @param Client $clientSecret
+     * @return $this;
+     */
+    private function setClientSecret($clientSecret)
+    {
+        $this->clientSecret = $clientSecret;
+        return $this;
+    }
+
+    /**
+     * @return Grant
+     */
+    public function getGrantType()
+    {
+        return $this->grantType;
+    }
+
+    /**
+     * @param Grant $grantType
+     * @return $this;
+     */
+    private function setGrantType($grantType)
+    {
+        $this->grantType = $grantType;
+        return $this;
+    }
+
+    /**
+     * @return version
+     */
+    public function getVersion()
+    {
+        return $this->version;
+    }
+
+    /**
+     * @param version $version
+     * @return $this;
+     */
+    private function setVersion($version)
+    {
+        $this->version = $version;
+        return $this;
+    }
+
+    /**
+     * @return null
+     */
+    public function getHttpClient()
+    {
+        return $this->httpClient;
+    }
+
+    /**
+     * @param null $httpClient
+     * @return $this;
+     */
+    private function setHttpClient($httpClient)
+    {
+        $this->httpClient = $httpClient;
+        return $this;
     }
 
 
+    public function getToken() {
+        $this->getHttpClient()
+            ->request(
+                'POST',
+                '/oauth/issueToken',
+                ['client_id' => $this->getClientId(), 'client_secret'=>$this->getClientSecret(), 'grant_type'=>$this->getGrantType()]
+            );
+    }
 }
