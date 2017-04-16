@@ -22,5 +22,72 @@ namespace Orangehrm\API;
 
 class HTTPRequest
 {
+    /**
+     * @var string EndPoint
+     */
+    private $endPoint = null;
 
+    /**
+     * @var Params
+     */
+    private $params = array();
+
+    /**
+     * @var bool
+     */
+    private $isShortUrl = false;
+
+    /**
+     * @return string
+     */
+    public function getEndPoint()
+    {
+        return $this->endPoint;
+    }
+
+    /**
+     * @param string $endPoint
+     * @return $this;
+     */
+    private function setEndPoint($endPoint)
+    {
+        $this->endPoint = $endPoint;
+        return $this;
+    }
+
+    /**
+     * @return Params
+     */
+    public function getParams()
+    {
+        return $this->params;
+    }
+
+    /**
+     * @param Params $params
+     * @return $this;
+     */
+    private function setParams($params)
+    {
+        $this->params = $params;
+        return $this;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function isIsShortUrl()
+    {
+        return $this->isShortUrl;
+    }
+
+    /**
+     * @param boolean $isShortUrl
+     * @return $this;
+     */
+    private function setIsShortUrl($isShortUrl)
+    {
+        $this->isShortUrl = $isShortUrl;
+        return $this;
+    }
 }
