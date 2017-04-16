@@ -47,6 +47,9 @@ class Client
      */
     private $version = 'v1';
 
+    /**
+     * @var null
+     */
     private $httpClient = null;
 
     /**
@@ -62,7 +65,7 @@ class Client
             ->setClientId($clientId)
             ->setClientSecret($clientSecret);
 
-        $this->setHttpClient(new HttpClient(['base_uri' => $domain]));
+        $this->setHttpClient(new HttpClient(['base_uri' => $domain, 'Content-Type' => 'application/json' ]));
     }
 
     /**
@@ -175,11 +178,29 @@ class Client
 
 
     public function getToken() {
-        $this->getHttpClient()
-            ->request(
-                'POST',
-                '/oauth/issueToken',
-                ['client_id' => $this->getClientId(), 'client_secret'=>$this->getClientSecret(), 'grant_type'=>$this->getGrantType()]
+        $response = $this->getHttpClient()
+            ->post(
+                '/symfony/web/index.php/oauth/issueToken',
+                ['form_params'=>
+                    [
+                        'client_id' => $this->getClientId(),
+                        'client_secret'=>$this->getClientSecret(),
+                        'grant_type'=>$this->getGrantType()
+                    ]
+                ]
+
             );
+       $result= json_decode($response->getBody()->getContents(),true);
+       return $result['access_token'];
+    }
+
+    public function get($endPoint, $params = array()) {
+        $token  = $this->getToken();
+        $data = ['headers' => [
+            'Authorization' => 'Bearer ' . $token,
+        ]];
+        $response = $this->getHttpClient()
+            ->get($endPoint,$data);
+        return json_decode($response->getBody()->getContents(),true);
     }
 }
