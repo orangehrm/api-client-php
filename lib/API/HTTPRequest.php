@@ -20,8 +20,8 @@
 namespace Orangehrm\API;
 
 
-class HTTPRequest
-{
+class HTTPRequest {
+    const INDEX_PATH = '/symfony/web/index.php';
     const GET_TOKEN_END_POINT = 'oauth/issueToken';
 
     /**
@@ -43,6 +43,16 @@ class HTTPRequest
      * @var string
      */
     private $apiVersion = 'v1';
+
+    /**
+     * HTTPRequest constructor.
+     * @param null $endPoint
+     * @param null $params
+     */
+    public function __construct($endPoint = null , $params = null) {
+        $this->setEndPoint($endPoint)
+            ->setParams($params);
+    }
 
     /**
      * @return string
@@ -104,9 +114,9 @@ class HTTPRequest
     public function buildEndPoint(){
         $endPoint = null ;
         if(!$this->isShortUrl()){
-            $endPoint = '/symfony/web/index.php/';
+            $endPoint = self::INDEX_PATH;
         }
-        return $endPoint.'api/'.$this->getApiVersion().'/'.$this->getEndPoint();
+        return $endPoint.'/api/'.$this->getApiVersion().'/'.$this->getEndPoint();
 
     }
 
@@ -117,7 +127,7 @@ class HTTPRequest
         if($this->isShortUrl()){
             return self::GET_TOKEN_END_POINT;
         }
-        return '/symfony/web/index.php/'.self::GET_TOKEN_END_POINT;
+        return self::INDEX_PATH.'/'.self::GET_TOKEN_END_POINT;
     }
 
     /**

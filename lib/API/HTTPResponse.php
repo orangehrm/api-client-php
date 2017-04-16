@@ -19,8 +19,42 @@
 
 namespace Orangehrm\API;
 
+class HTTPResponse {
 
-class HTTPResponse
-{
+    private $response = null ;
+
+    public function __construct($response) {
+        $this->response = $response;
+    }
+
+    public function getStatusCode(){
+
+    }
+
+    /**
+     * @return array
+     */
+    public function getResult() {
+       return json_decode($this->getResponse()->getBody()->getContents(), true);
+    }
+
+    /**
+     * @return null
+     */
+    private function getResponse()
+    {
+        return $this->response;
+    }
+
+    /**
+     * Extract Token
+     * @return mixed
+     */
+    public function getToken() {
+        $result = $this->getResult();
+        if(isset($result['access_token'])){
+            return $result['access_token'];
+        }
+    }
 
 }
