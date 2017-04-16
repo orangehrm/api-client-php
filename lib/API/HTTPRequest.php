@@ -49,7 +49,7 @@ class HTTPRequest
      * @param string $endPoint
      * @return $this;
      */
-    private function setEndPoint($endPoint)
+    public function setEndPoint($endPoint)
     {
         $this->endPoint = $endPoint;
         return $this;
@@ -67,7 +67,7 @@ class HTTPRequest
      * @param Params $params
      * @return $this;
      */
-    private function setParams($params)
+    public function setParams($params)
     {
         $this->params = $params;
         return $this;
@@ -76,7 +76,7 @@ class HTTPRequest
     /**
      * @return boolean
      */
-    public function isIsShortUrl()
+    public function isShortUrl()
     {
         return $this->isShortUrl;
     }
@@ -85,9 +85,23 @@ class HTTPRequest
      * @param boolean $isShortUrl
      * @return $this;
      */
-    private function setIsShortUrl($isShortUrl)
+    public function setIsShortUrl($isShortUrl)
     {
         $this->isShortUrl = $isShortUrl;
         return $this;
+    }
+
+    /**
+     * @param string $endPoint
+     * @return null|string
+     */
+    public function buildEndPoint($endPoint = null){
+        if(empty($endPoint)){
+            $endPoint = $this->getEndPoint();
+        }
+        if($this->isShortUrl()){
+            return $endPoint;
+        }
+        return '/symfony/web/index.php/'.$endPoint;
     }
 }
