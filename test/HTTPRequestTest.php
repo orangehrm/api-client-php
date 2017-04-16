@@ -33,12 +33,12 @@ class HTTPRequestTest extends PHPUnit_Framework_TestCase {
     public function testBuildEndPointWhenEmptyEndPoint() {
         $this->httpRequest->setEndPoint('employee/search');
         $result = $this->httpRequest->buildEndPoint();
-        $this->assertEquals('/symfony/web/index.php/employee/search',$result);
+        $this->assertEquals('/symfony/web/index.php/api/v1/employee/search',$result);
     }
 
-    public function testBuildEndPointForGetTokenEndPoint() {
+    public function testGetTokenEndPoint() {
 
-        $result = $this->httpRequest->buildEndPoint('oauth/issueToken');
+        $result = $this->httpRequest->getTokenEndPoint();
         $this->assertEquals('/symfony/web/index.php/oauth/issueToken',$result);
     }
 }
