@@ -42,15 +42,12 @@ class Client
      */
     private $grantType = 'client_credentials';
 
-    /**
-     * @var version number string
-     */
-    private $version = 'v1';
 
     /**
      * @var null
      */
     private $httpClient = null;
+
 
     /**
      * Client constructor.
@@ -65,7 +62,7 @@ class Client
             ->setClientId($clientId)
             ->setClientSecret($clientSecret);
 
-        $this->setHttpClient(new HttpClient(['base_uri' => $domain, 'Content-Type' => 'application/json' ]));
+        $this->setHttpClient(new HttpClient(['base_uri' => $domain, 'Content-Type' => 'application/json']));
     }
 
     /**
@@ -141,24 +138,6 @@ class Client
     }
 
     /**
-     * @return version
-     */
-    public function getVersion()
-    {
-        return $this->version;
-    }
-
-    /**
-     * @param version $version
-     * @return $this;
-     */
-    private function setVersion($version)
-    {
-        $this->version = $version;
-        return $this;
-    }
-
-    /**
      * @return null
      */
     public function getHttpClient()
@@ -176,31 +155,42 @@ class Client
         return $this;
     }
 
-
-    public function getToken() {
-        $response = $this->getHttpClient()
+    /**
+     * @param HTTPRequest $request
+     * @return HTTPResponse $response
+     */
+    public function getToken(HTTPRequest $request)
+    {
+        $result = $this->getHttpClient()
             ->post(
-                '/symfony/web/index.php/oauth/issueToken',
-                ['form_params'=>
-                    [
-                        'client_id' => $this->getClientId(),
-                        'client_secret'=>$this->getClientSecret(),
-                        'grant_type'=>$this->getGrantType()
-                    ]
+                $request->getTokenEndPoint(),
+                [
+                    'form_params' =>
+                        [
+                            'client_id' => $this->getClientId(),
+                            'client_secret' => $this->getClientSecret(),
+                            'grant_type' => $this->getGrantType()
+                        ]
                 ]
 
             );
-       $result= json_decode($response->getBody()->getContents(),true);
-       return $result['access_token'];
+        return new HTTPResponse($result);
     }
 
-    public function get($endPoint, $params = array()) {
-        $token  = $this->getToken();
-        $data = ['headers' => [
-            'Authorization' => 'Bearer ' . $token,
-        ]];
+    /**
+     * @param HTTPRequest $request
+     * @return HTTPResponse
+     */
+    public function get(HTTPRequest $request)
+    {
+        $tokenResponse = $this->getToken($request);
+        $data = [
+            'headers' => [
+                'Authorization' => 'Bearer ' . $tokenResponse->getToken(),
+            ]
+        ];
         $response = $this->getHttpClient()
-            ->get($endPoint,$data);
-        return json_decode($response->getBody()->getContents(),true);
+            ->get($request->buildEndPoint(), $data);
+        return new HTTPResponse($response);
     }
 }

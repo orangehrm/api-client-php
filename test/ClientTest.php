@@ -17,10 +17,28 @@
  * if not, write to the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA  02110-1301, USA
  */
+
+use Orangehrm\API\Client;
+use Orangehrm\API\HTTPRequest;
+
 class ClientTest extends PHPUnit_Framework_TestCase
 {
+    public $client = null;
+
+    protected function setUp()
+    {
+        $this->client = new Client('http://orangehrm.os','testclient','testpass');
+    }
 
     public function testGetToken(){
-        $this->assertTrue(true);
+        $request = new HTTPRequest();
+        $result = $this->client->getToken($request);
+        $this->assertNotEmpty($result);
+    }
+
+    public function testGetRequest() {
+        $request = new HTTPRequest('employee/search');
+        $result = $this->client->get($request);
+        $this->assertArrayHasKey('data',$result->getResult());
     }
 }
