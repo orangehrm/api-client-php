@@ -1,5 +1,5 @@
 {
-  "name": "OrangeHRM API client",
+  "name": "orangehrm/api-client-php",
   "type": "library",
   "description": "OrangeHRM API client",
   "keywords": ["REST","api"],
