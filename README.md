@@ -28,6 +28,6 @@ use Orangehrm\API\HTTPRequest;
 $client = new Client('http://orangehrm.os','testclient','testpass');
 
 $request = new HTTPRequest('employee/search');
-$result = $this->client->get($request)->getResult;
+$result = $client->get($request)->getResult();
 
 ````
