@@ -3,6 +3,16 @@ OrangeHRM API Client (PHP)
 
 A PHP client lib for the [OrangeHRM API](https://github.com/orangehrm/orangehrm-api-doc)
 
+How to install
+==========
+
+You can install orangehrm api client lib via composer 
+````
+  "require": {
+    "orangehrm/api-client-php": "v1.0"
+  },
+````
+
 How to use
 ===========
 
