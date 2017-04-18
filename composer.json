@@ -6,7 +6,7 @@
   "authors": [
     {
       "name": "Samantha Jayasinghe",
-      "email": "isamantha@gmail.com"
+      "email": "samanthaj@orangehrm.com"
     }
   ],
   "require-dev": {
@@ -19,5 +19,8 @@
     "psr-4": {
       "Orangehrm\\": "lib/"
     }
-  }
+  },
+  "license": [
+       "GPL-2.0"
+    ]
 }
