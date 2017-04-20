@@ -28,6 +28,11 @@ class Client
     private $domain = '';
 
     /**
+     * @var string
+     */
+    private $path = '';
+
+    /**
      * @var Client Id int
      */
     private $clientId = 0;
@@ -57,12 +62,18 @@ class Client
      */
     public function __construct($domain, $clientId, $clientSecret)
     {
+        $url = parse_url($domain);
+        $baseUrl = $url['scheme'].'://'.$url['host'];
 
-        $this->setDomain($domain)
+        $this->setDomain($baseUrl)
             ->setClientId($clientId)
             ->setClientSecret($clientSecret);
 
-        $this->setHttpClient(new HttpClient(['base_uri' => $domain, 'Content-Type' => 'application/json']));
+        if(isset( $url['path'])){
+            $this->setPath($url['path']);
+        }
+
+        $this->setHttpClient(new HttpClient(['base_uri' => $baseUrl, 'Content-Type' => 'application/json']));
     }
 
     /**
@@ -156,11 +167,32 @@ class Client
     }
 
     /**
+     * @return string
+     */
+    public function getPath()
+    {
+        return $this->path;
+    }
+
+    /**
+     * @param string $path
+     * @return $this;
+     */
+    private function setPath($path)
+    {
+        $this->path = $path;
+        return $this;
+    }
+
+
+
+    /**
      * @param HTTPRequest $request
      * @return HTTPResponse $response
      */
     public function getToken(HTTPRequest $request)
     {
+        $request->setBasePath($this->getPath());
         $result = $this->getHttpClient()
             ->post(
                 $request->getTokenEndPoint(),
@@ -184,6 +216,7 @@ class Client
     public function get(HTTPRequest $request)
     {
         $tokenResponse = $this->getToken($request);
+        $request->setBasePath($this->getPath());
         $data = [
             'headers' => [
                 'Authorization' => 'Bearer ' . $tokenResponse->getToken(),

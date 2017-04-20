@@ -45,6 +45,11 @@ class HTTPRequest {
     private $apiVersion = 'v1';
 
     /**
+     * @var string
+     */
+    private $basePath = '';
+
+    /**
      * HTTPRequest constructor.
      * @param null $endPoint
      * @param null $params
@@ -111,12 +116,30 @@ class HTTPRequest {
     /**
      * @return string
      */
+    public function getBasePath()
+    {
+        return $this->basePath;
+    }
+
+    /**
+     * @param string $basePath
+     * @return $this;
+     */
+    public function setBasePath($basePath)
+    {
+        $this->basePath = $basePath;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
     public function buildEndPoint(){
-        $endPoint = null ;
+        $indexPath = null ;
         if(!$this->isShortUrl()){
-            $endPoint = self::INDEX_PATH;
+            $indexPath = self::INDEX_PATH;
         }
-        return $endPoint.'/api/'.$this->getApiVersion().'/'.$this->getEndPoint();
+        return $this->getBasePath().$indexPath.'/api/'.$this->getApiVersion().'/'.$this->getEndPoint();
 
     }
 
@@ -127,7 +150,7 @@ class HTTPRequest {
         if($this->isShortUrl()){
             return self::GET_TOKEN_END_POINT;
         }
-        return self::INDEX_PATH.'/'.self::GET_TOKEN_END_POINT;
+        return $this->getBasePath().self::INDEX_PATH.'/'.self::GET_TOKEN_END_POINT;
     }
 
     /**
