@@ -19,6 +19,7 @@
 namespace Orangehrm\API;
 
 use GuzzleHttp\Client as HttpClient;
+use GuzzleHttp\Exception\RequestException;
 
 class Client
 {
@@ -63,13 +64,13 @@ class Client
     public function __construct($domain, $clientId, $clientSecret)
     {
         $url = parse_url($domain);
-        $baseUrl = $url['scheme'].'://'.$url['host'];
+        $baseUrl = $url['scheme'] . '://' . $url['host'];
 
         $this->setDomain($baseUrl)
             ->setClientId($clientId)
             ->setClientSecret($clientSecret);
 
-        if(isset( $url['path'])){
+        if (isset($url['path'])) {
             $this->setPath($url['path']);
         }
 
@@ -185,7 +186,6 @@ class Client
     }
 
 
-
     /**
      * @param HTTPRequest $request
      * @return HTTPResponse $response
@@ -215,15 +215,20 @@ class Client
      */
     public function get(HTTPRequest $request)
     {
-        $tokenResponse = $this->getToken($request);
-        $request->setBasePath($this->getPath());
-        $data = [
-            'headers' => [
-                'Authorization' => 'Bearer ' . $tokenResponse->getToken(),
-            ]
-        ];
-        $response = $this->getHttpClient()
-            ->get($request->buildEndPoint(), $data);
-        return new HTTPResponse($response);
+        try {
+            $tokenResponse = $this->getToken($request);
+            $request->setBasePath($this->getPath());
+            $data = [
+                'headers' => [
+                    'Authorization' => 'Bearer ' . $tokenResponse->getToken(),
+                ]
+            ];
+            $response = $this->getHttpClient()
+                ->get($request->buildEndPoint(), $data);
+            return new HTTPResponse($response);
+        } catch (RequestException $e) {
+            echo $e->getMessage();
+        }
+
     }
 }
