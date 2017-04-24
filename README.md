@@ -9,7 +9,7 @@ How to install
 You can install orangehrm api client lib via composer 
 ````
   "require": {
-    "orangehrm/api-client-php": "v1.0"
+    "orangehrm/api-client-php": "v1.1"
   },
 ````
 
