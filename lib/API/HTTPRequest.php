@@ -21,7 +21,7 @@ namespace Orangehrm\API;
 
 
 class HTTPRequest {
-    const INDEX_PATH = '/symfony/web/index.php';
+
     const GET_TOKEN_END_POINT = 'oauth/issueToken';
 
     /**
@@ -37,7 +37,7 @@ class HTTPRequest {
     /**
      * @var bool
      */
-    private $isShortUrl = false;
+    private $indexPath = '/index.php';
 
     /**
      * @var string
@@ -98,18 +98,18 @@ class HTTPRequest {
     /**
      * @return boolean
      */
-    public function isShortUrl()
+    public function getIndexPath()
     {
-        return $this->isShortUrl;
+        return $this->indexPath;
     }
 
     /**
-     * @param boolean $isShortUrl
+     * @param boolean $indexPath
      * @return $this;
      */
-    public function setIsShortUrl($isShortUrl)
+    public function setIndexPath($indexPath)
     {
-        $this->isShortUrl = $isShortUrl;
+        $this->indexPath = $indexPath;
         return $this;
     }
 
@@ -135,11 +135,8 @@ class HTTPRequest {
      * @return string
      */
     public function buildEndPoint(){
-        $indexPath = null ;
-        if(!$this->isShortUrl()){
-            $indexPath = self::INDEX_PATH;
-        }
-        return $this->getBasePath().$indexPath.'/api/'.$this->getApiVersion().'/'.$this->getEndPoint();
+
+        return $this->getBasePath().$this->getIndexPath().'/api/'.$this->getApiVersion().'/'.$this->getEndPoint();
 
     }
 
@@ -147,10 +144,8 @@ class HTTPRequest {
      * @return string
      */
     public function getTokenEndPoint() {
-        if($this->isShortUrl()){
-            return self::GET_TOKEN_END_POINT;
-        }
-        return $this->getBasePath().self::INDEX_PATH.'/'.self::GET_TOKEN_END_POINT;
+
+        return $this->getBasePath().$this->getIndexPath().'/'.self::GET_TOKEN_END_POINT;
     }
 
     /**

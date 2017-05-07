@@ -50,6 +50,11 @@ class Client
 
 
     /**
+     * @var string
+     */
+    private $indexPath = '/index.php';
+
+    /**
      * @var null
      */
     private $httpClient = null;
@@ -185,6 +190,23 @@ class Client
         return $this;
     }
 
+    /**
+     * @return string
+     */
+    public function getIndexPath()
+    {
+        return $this->indexPath;
+    }
+
+    /**
+     * @param string $indexPath
+     * @return $this;
+     */
+    public function setIndexPath($indexPath)
+    {
+        $this->indexPath = $indexPath;
+        return $this;
+    }
 
     /**
      * @param HTTPRequest $request

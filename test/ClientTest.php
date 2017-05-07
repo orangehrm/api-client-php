@@ -27,7 +27,7 @@ class ClientTest extends PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->client = new Client('http://orangehrm.os','testclient','testpass');
+        $this->client = new Client('https://api-sample-cs.orangehrm.com','testclient','testpass');
     }
 
     public function testGetToken(){
@@ -39,6 +39,7 @@ class ClientTest extends PHPUnit_Framework_TestCase
     public function testGetRequest() {
         $request = new HTTPRequest('employee/search');
         $result = $this->client->get($request);
+
         $this->assertArrayHasKey('data',$result->getResult());
     }
 }
