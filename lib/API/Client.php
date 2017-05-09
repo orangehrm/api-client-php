@@ -247,9 +247,18 @@ class Client
             ];
             $response = $this->getHttpClient()
                 ->get($request->buildEndPoint(), $data);
-            return new HTTPResponse($response);
+
+            $httpResponse = new HTTPResponse($response);
+            return $httpResponse;
         } catch (RequestException $e) {
-            echo $e->getMessage();
+            if ($e->hasResponse()) {
+                $httpResponse = new HTTPResponse($e);
+                $httpResponse->setStatusCode($e->getCode());
+                return $httpResponse;
+            } else{
+                throw $e;
+            }
+
         }
 
     }

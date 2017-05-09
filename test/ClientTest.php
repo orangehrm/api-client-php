@@ -42,4 +42,12 @@ class ClientTest extends PHPUnit_Framework_TestCase
 
         $this->assertArrayHasKey('data',$result->getResult());
     }
+
+    public function testErrorResult() {
+        $request = new HTTPRequest('leave/search?fromDate="2005-11-30"&toDate="2005-12-30"');
+        $result = $this->client->get($request);
+        $this->assertTrue($result->hasError());
+        $this->assertEquals('toDate must be a valid date. Sample format: "2005-12-30"',$result->getError());
+        $this->assertEquals(202,$result->getStatusCode());
+    }
 }

@@ -23,19 +23,46 @@ class HTTPResponse {
 
     private $response = null ;
 
+    private $statusCode = 200;
+
+    private $result = null;
+
     public function __construct($response) {
         $this->response = $response;
     }
 
-    public function getStatusCode(){
+    /**
+     * @return null
+     */
+    public function getStatusCode()
+    {
+        $result = $this->getResult();
+        if(isset($result['error'])) {
+            return $result['error']['status'];
+        } else{
+            return $this->statusCode;
+        }
 
+    }
+
+    /**
+     * @param null $statusCode
+     * @return $this;
+     */
+    public function setStatusCode($statusCode)
+    {
+        $this->statusCode = $statusCode;
+        return $this;
     }
 
     /**
      * @return array
      */
     public function getResult() {
-       return json_decode($this->getResponse()->getBody()->getContents(), true);
+        if(empty($this->result)){
+            $this->result = json_decode($this->getResponse()->getBody()->getContents(), true);
+        }
+       return $this->result ;
     }
 
     /**
@@ -55,6 +82,20 @@ class HTTPResponse {
         if(isset($result['access_token'])){
             return $result['access_token'];
         }
+    }
+
+    public function hasError() {
+
+        $result = $this->getResult();
+        return isset($result['error']);
+    }
+
+    public function getError() {
+        $result = $this->getResult();
+        if(isset($result['error'])) {
+            return $result['error']['text'];
+        }
+
     }
 
 }
