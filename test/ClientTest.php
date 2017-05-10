@@ -43,6 +43,21 @@ class ClientTest extends PHPUnit_Framework_TestCase
         $this->assertArrayHasKey('data',$result->getResult());
     }
 
+    public function testPostRequest() {
+        $request = new HTTPRequest('employee/1/contact-detail');
+        $request->setParams(
+            [
+                'addressStreet1' => '17 Clifford Road',
+                'addressStreet2' => 'Johnsonville',
+                'city' => 'Wellington',
+                'state' => 'North',
+                'zip' => '60113'
+            ]
+        );
+        $result = $this->client->post($request);
+        $this->assertArrayHasKey('success',$result->getResult());
+    }
+
     public function testErrorResult() {
         $request = new HTTPRequest('leave/search?fromDate="2005-11-30"&toDate="2005-12-30"');
         $result = $this->client->get($request);

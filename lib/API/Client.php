@@ -262,4 +262,38 @@ class Client
         }
 
     }
+
+    /**
+     * @param HTTPRequest $request
+     *
+     * @return HTTPResponse
+     */
+    public function post(HTTPRequest $request)
+    {
+        try {
+            $tokenResponse = $this->getToken($request);
+            $request->setBasePath($this->getPath());
+            $data = [
+                'headers' => [
+                    'Authorization' => 'Bearer ' . $tokenResponse->getToken(),
+                ],
+                'json'=>$request->getParams()
+            ];
+            $response = $this->getHttpClient()
+                ->post($request->buildEndPoint(), $data);
+
+            $httpResponse = new HTTPResponse($response);
+            return $httpResponse;
+        } catch (RequestException $e) {
+            if ($e->hasResponse()) {
+                $httpResponse = new HTTPResponse($e);
+                $httpResponse->setStatusCode($e->getCode());
+                return $httpResponse;
+            } else{
+                throw $e;
+            }
+
+        }
+
+    }
 }
