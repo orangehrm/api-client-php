@@ -19,15 +19,17 @@
 
 namespace Orangehrm\API;
 
-class HTTPResponse {
+class HTTPResponse
+{
 
-    private $response = null ;
+    private $response = null;
 
     private $statusCode = 200;
 
     private $result = null;
 
-    public function __construct($response) {
+    public function __construct($response)
+    {
         $this->response = $response;
     }
 
@@ -36,12 +38,7 @@ class HTTPResponse {
      */
     public function getStatusCode()
     {
-        $result = $this->getResult();
-        if(isset($result['error'])) {
-            return $result['error']['status'];
-        } else{
-            return $this->statusCode;
-        }
+        return $this->statusCode;
 
     }
 
@@ -58,11 +55,15 @@ class HTTPResponse {
     /**
      * @return array
      */
-    public function getResult() {
-        if(empty($this->result)){
+    public function getResult()
+    {
+        if (empty($this->result)) {
+            if (empty($this->getResponse()->getBody())) {
+                return null;
+            }
             $this->result = json_decode($this->getResponse()->getBody()->getContents(), true);
         }
-       return $this->result ;
+        return $this->result;
     }
 
     /**
@@ -77,22 +78,33 @@ class HTTPResponse {
      * Extract Token
      * @return mixed
      */
-    public function getToken() {
+    public function getToken()
+    {
         $result = $this->getResult();
-        if(isset($result['access_token'])){
+        if (isset($result['access_token'])) {
             return $result['access_token'];
         }
     }
 
-    public function hasError() {
+    public function hasError()
+    {
 
-        $result = $this->getResult();
-        return isset($result['error']);
+        if ($this->getStatusCode() != 200) {
+            return true;
+        } else {
+            $result = $this->getResult();
+            if (isset($result['error'])) {
+                return true;
+            }
+        }
+
     }
 
-    public function getError() {
+    public function getError()
+    {
+
         $result = $this->getResult();
-        if(isset($result['error'])) {
+        if (isset($result['error'])) {
             return $result['error']['text'];
         }
 
