@@ -255,7 +255,7 @@ class Client
                 $httpResponse = new HTTPResponse($e);
                 $httpResponse->setStatusCode($e->getCode());
                 return $httpResponse;
-            } else{
+            } else {
                 throw $e;
             }
 
@@ -277,7 +277,7 @@ class Client
                 'headers' => [
                     'Authorization' => 'Bearer ' . $tokenResponse->getToken(),
                 ],
-                'json'=>$request->getParams()
+                'json' => $request->getParams()
             ];
             $response = $this->getHttpClient()
                 ->post($request->buildEndPoint(), $data);
@@ -289,7 +289,7 @@ class Client
                 $httpResponse = new HTTPResponse($e);
                 $httpResponse->setStatusCode($e->getCode());
                 return $httpResponse;
-            } else{
+            } else {
                 throw $e;
             }
 
