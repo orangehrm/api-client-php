@@ -251,14 +251,8 @@ class Client
             $httpResponse = new HTTPResponse($response);
             return $httpResponse;
         } catch (RequestException $e) {
-            if ($e->hasResponse()) {
-                $httpResponse = new HTTPResponse($e);
-                $httpResponse->setStatusCode($e->getCode());
-                return $httpResponse;
-            } else {
-                throw $e;
-            }
 
+            return $this->handleErrorsResponse($e);
         }
 
     }
@@ -285,14 +279,74 @@ class Client
             $httpResponse = new HTTPResponse($response);
             return $httpResponse;
         } catch (RequestException $e) {
-            if ($e->hasResponse()) {
-                $httpResponse = new HTTPResponse($e);
-                $httpResponse->setStatusCode($e->getCode());
-                return $httpResponse;
-            } else {
-                throw $e;
-            }
+            return $this->handleErrorsResponse($e);
+        }
 
+    }
+
+    /**
+     * @param HTTPRequest $request
+     * @return HTTPResponse
+     */
+    public function put(HTTPRequest $request)
+    {
+        try {
+            $tokenResponse = $this->getToken($request);
+            $request->setBasePath($this->getPath());
+            $data = [
+                'headers' => [
+                    'Authorization' => 'Bearer ' . $tokenResponse->getToken(),
+                ],
+                'json' => $request->getParams()
+            ];
+            $response = $this->getHttpClient()
+                ->put($request->buildEndPoint(), $data);
+
+            $httpResponse = new HTTPResponse($response);
+            return $httpResponse;
+        } catch (RequestException $e) {
+            return $this->handleErrorsResponse($e);
+        }
+    }
+
+    /**
+     * @param RequestException $e
+     * @return HTTPResponse
+     */
+    private function handleErrorsResponse(RequestException $e)
+    {
+        if ($e->hasResponse()) {
+            $httpResponse = new HTTPResponse($e);
+            $httpResponse->setStatusCode($e->getCode());
+            return $httpResponse;
+        } else {
+            throw $e;
+        }
+    }
+
+    /**
+     * @param HTTPRequest $request
+     * @return HTTPResponse
+     */
+    public function delete(HTTPRequest $request)
+    {
+        try {
+            $tokenResponse = $this->getToken($request);
+            $request->setBasePath($this->getPath());
+            $data = [
+                'headers' => [
+                    'Authorization' => 'Bearer ' . $tokenResponse->getToken(),
+                ],
+                'json' => $request->getParams()
+            ];
+            $response = $this->getHttpClient()
+                ->delete($request->buildEndPoint(), $data);
+
+            $httpResponse = new HTTPResponse($response);
+            return $httpResponse;
+        } catch (RequestException $e) {
+
+            return $this->handleErrorsResponse($e);
         }
 
     }
