@@ -184,7 +184,7 @@ class Client
      * @param string $path
      * @return $this;
      */
-    private function setPath($path)
+    public function setPath($path)
     {
         $this->path = $path;
         return $this;
@@ -271,7 +271,7 @@ class Client
                 'headers' => [
                     'Authorization' => 'Bearer ' . $tokenResponse->getToken(),
                 ],
-                'json' => $request->getParams()
+                'form_params' => $request->getParams()
             ];
             $response = $this->getHttpClient()
                 ->post($request->buildEndPoint(), $data);
@@ -297,7 +297,7 @@ class Client
                 'headers' => [
                     'Authorization' => 'Bearer ' . $tokenResponse->getToken(),
                 ],
-                'json' => $request->getParams()
+                'form_params' => $request->getParams()
             ];
             $response = $this->getHttpClient()
                 ->put($request->buildEndPoint(), $data);
@@ -337,7 +337,7 @@ class Client
                 'headers' => [
                     'Authorization' => 'Bearer ' . $tokenResponse->getToken(),
                 ],
-                'json' => $request->getParams()
+                'form_params' => $request->getParams()
             ];
             $response = $this->getHttpClient()
                 ->delete($request->buildEndPoint(), $data);
