@@ -21,7 +21,7 @@ namespace Orangehrm\API;
 use GuzzleHttp\Client as HttpClient;
 use GuzzleHttp\Exception\RequestException;
 
-class Client
+class Client implements IClient
 {
     /**
      * @var Domain string
