@@ -27,23 +27,26 @@ class ClientTest extends PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->client = new Client('https://api-sample-cs.orangehrm.com','testclient','testpass');
+        $this->client = new Client('https://api-sample-cs.orangehrm.com', 'testclient', 'testpass');
     }
 
-    public function testGetToken(){
+    public function testGetToken()
+    {
         $request = new HTTPRequest();
         $result = $this->client->getToken($request);
         $this->assertNotEmpty($result);
     }
 
-    public function testGetRequest() {
+    public function testGet200StatusCode()
+    {
         $request = new HTTPRequest('employee/search');
         $result = $this->client->get($request);
 
-        $this->assertArrayHasKey('data',$result->getResult());
+        $this->assertArrayHasKey('data', $result->getResult());
     }
 
-    public function testPostRequest() {
+    public function testPost200StatusCode()
+    {
         $request = new HTTPRequest('employee/1/contact-detail');
         $request->setParams(
             [
@@ -55,14 +58,62 @@ class ClientTest extends PHPUnit_Framework_TestCase
             ]
         );
         $result = $this->client->post($request);
-        $this->assertArrayHasKey('success',$result->getResult());
+        $this->assertArrayHasKey('success', $result->getResult());
     }
 
-    public function testErrorResult() {
+    public function testGet202StatusCode()
+    {
         $request = new HTTPRequest('leave/search?fromDate="2005-11-30"&toDate="2005-12-30"');
         $result = $this->client->get($request);
+
         $this->assertTrue($result->hasError());
-        $this->assertEquals('toDate must be a valid date. Sample format: "2005-12-30"',$result->getError());
-        $this->assertEquals(202,$result->getStatusCode());
+        $this->assertEquals('toDate must be a valid date. Sample format: "2005-12-30"', $result->getError());
+    }
+
+    public function testGet404StatusCode()
+    {
+        $request = new HTTPRequest('employee/event?fromDate=2016-06-11&toDate=2016-05-13&type=employee&event=SAVE');
+        $result = $this->client->get($request);
+        $this->assertTrue($result->hasError());
+        $this->assertEquals(404, $result->getStatusCode());
+    }
+
+    public function testPut200StatusCode()
+    {
+        $request = new HTTPRequest('employee/1/contact-detail');
+        $request->setParams(
+            [
+                'addressStreet1' => '17 Clifford Road',
+                'addressStreet2' => 'Johnsonville',
+                'city' => 'Wellington',
+                'state' => 'North',
+                'zip' => '60112'
+            ]
+        );
+        $result = $this->client->put($request);
+        $this->assertArrayHasKey('success', $result->getResult());
+    }
+
+    public function testDelete200StatusCode()
+    {
+        $requestDependent = new HTTPRequest('employee/1/dependent');
+        $requestDependent->setParams(
+            [
+                'id' => 1,
+                'name' => 'Inu',
+                'relationship' => 'daughter',
+                'dob' => '2012-12-23'
+            ]
+        );
+        $this->client->post($requestDependent);
+
+        $requestDelete = new HTTPRequest('employee/1/dependent');
+        $requestDelete->getParams(
+            [
+                'id' => 1
+            ]
+        );
+        $result = $this->client->delete($requestDelete);
+        $this->assertEquals(200, $result->getStatusCode());
     }
 }
