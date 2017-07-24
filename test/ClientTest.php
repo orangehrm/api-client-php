@@ -25,9 +25,14 @@ class ClientTest extends PHPUnit_Framework_TestCase
 {
     public $client = null;
 
+    public $testEmployee = null;
+
     protected function setUp()
     {
-        $this->client = new Client('https://api-sample-cs.orangehrm.com', 'testclient', 'testpass');
+        //$this->client = new Client('https://api-sample-cs.orangehrm.com', 'testclient', 'testpass');
+        $this->client = new Client('http://orangehrm.dev', 'testclient', 'testpass');
+        $this->testEmployee = $this->addTestEmployee('Mike','Combas');
+
     }
 
     public function testGetToken()
@@ -47,7 +52,7 @@ class ClientTest extends PHPUnit_Framework_TestCase
 
     public function testPost200StatusCode()
     {
-        $request = new HTTPRequest('employee/1/contact-detail');
+        $request = new HTTPRequest('employee/'.$this->testEmployee['id'].'/contact-detail');
         $request->setParams(
             [
                 'addressStreet1' => '17 Clifford Road',
@@ -80,7 +85,7 @@ class ClientTest extends PHPUnit_Framework_TestCase
 
     public function testPut200StatusCode()
     {
-        $request = new HTTPRequest('employee/1/contact-detail');
+        $request = new HTTPRequest('employee/'.$this->testEmployee['id'].'/contact-detail');
         $request->setParams(
             [
                 'addressStreet1' => '17 Clifford Road',
@@ -96,7 +101,7 @@ class ClientTest extends PHPUnit_Framework_TestCase
 
     public function testDelete200StatusCode()
     {
-        $requestDependent = new HTTPRequest('employee/1/dependent');
+        $requestDependent = new HTTPRequest('employee/'.$this->testEmployee['id'].'/dependent');
         $requestDependent->setParams(
             [
                 'id' => 1,
@@ -107,7 +112,7 @@ class ClientTest extends PHPUnit_Framework_TestCase
         );
         $this->client->post($requestDependent);
 
-        $requestDelete = new HTTPRequest('employee/1/dependent');
+        $requestDelete = new HTTPRequest('employee/'.$this->testEmployee['id'].'/dependent');
         $requestDelete->getParams(
             [
                 'id' => 1
@@ -115,5 +120,29 @@ class ClientTest extends PHPUnit_Framework_TestCase
         );
         $result = $this->client->delete($requestDelete);
         $this->assertEquals(200, $result->getStatusCode());
+    }
+
+    private function addTestEmployee($firstName, $lastName) {
+        $request = new HTTPRequest('employee/0');
+        $request->setParams(
+            [
+                'firstName' => $firstName,
+                'lastName' => $lastName,
+            ]
+        );
+        $response = $this->client->post($request);
+        return $response->getResult();
+    }
+
+    protected function tearDown() {
+        $request = new HTTPRequest('employee/'.$this->testEmployee['id'].'/action/terminate');
+        $request->setParams(
+            [
+                'id' => $this->testEmployee['id'],
+                'date' => date("Y-m-d "),
+                'reason'=> 'Terminate test employee'
+            ]
+        );
+        $this->client->post($request);
     }
 }
