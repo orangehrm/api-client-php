@@ -20,39 +20,45 @@
 
 use Orangehrm\API\HTTPRequest;
 
-class HTTPRequestTest extends PHPUnit_Framework_TestCase {
+class HTTPRequestTest extends PHPUnit_Framework_TestCase
+{
     /**
      * @var HTTPRequest
      */
     protected $httpRequest = null;
 
-    protected function setUp() {
+    protected function setUp()
+    {
         $this->httpRequest = new HTTPRequest();
     }
 
-    public function testBuildEndPointWhenEmployeeEndPoint() {
+    public function testBuildEndPointWhenEmployeeEndPoint()
+    {
         $this->httpRequest->setEndPoint('employee/search');
         $result = $this->httpRequest->buildEndPoint();
-        $this->assertEquals('/index.php/api/v1/employee/search',$result);
+        $this->assertEquals('/index.php/api/v1/employee/search', $result);
     }
 
-    public function testGetTokenEndPoint() {
+    public function testGetTokenEndPoint()
+    {
 
         $result = $this->httpRequest->getTokenEndPoint();
-        $this->assertEquals('/index.php/oauth/issueToken',$result);
+        $this->assertEquals('/index.php/oauth/issueToken', $result);
     }
 
-    public function testBuildEndPointWhenEmployeeEndPointWithCustomIndexPath() {
+    public function testBuildEndPointWhenEmployeeEndPointWithCustomIndexPath()
+    {
         $this->httpRequest->setEndPoint('employee/search');
         $this->httpRequest->setIndexPath('/symfony/web/index.php');
         $result = $this->httpRequest->buildEndPoint();
-        $this->assertEquals('/symfony/web/index.php/api/v1/employee/search',$result);
+        $this->assertEquals('/symfony/web/index.php/api/v1/employee/search', $result);
     }
 
-    public function testGetTokenEndPointWithCustomIndexPath() {
+    public function testGetTokenEndPointWithCustomIndexPath()
+    {
 
         $this->httpRequest->setIndexPath('/symfony/web/index.php');
         $result = $this->httpRequest->getTokenEndPoint();
-        $this->assertEquals('/symfony/web/index.php/oauth/issueToken',$result);
+        $this->assertEquals('/symfony/web/index.php/oauth/issueToken', $result);
     }
 }

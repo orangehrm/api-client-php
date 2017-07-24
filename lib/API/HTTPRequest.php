@@ -20,7 +20,8 @@
 namespace Orangehrm\API;
 
 
-class HTTPRequest {
+class HTTPRequest
+{
 
     const GET_TOKEN_END_POINT = 'oauth/issueToken';
 
@@ -54,7 +55,8 @@ class HTTPRequest {
      * @param null $endPoint
      * @param null $params
      */
-    public function __construct($endPoint = null , $params = null) {
+    public function __construct($endPoint = null, $params = null)
+    {
         $this->setEndPoint($endPoint)
             ->setParams($params);
     }
@@ -134,18 +136,20 @@ class HTTPRequest {
     /**
      * @return string
      */
-    public function buildEndPoint(){
+    public function buildEndPoint()
+    {
 
-        return $this->getBasePath().$this->getIndexPath().'/api/'.$this->getApiVersion().'/'.$this->getEndPoint();
+        return $this->getBasePath() . $this->getIndexPath() . '/api/' . $this->getApiVersion() . '/' . $this->getEndPoint();
 
     }
 
     /**
      * @return string
      */
-    public function getTokenEndPoint() {
+    public function getTokenEndPoint()
+    {
 
-        return $this->getBasePath().$this->getIndexPath().'/'.self::GET_TOKEN_END_POINT;
+        return $this->getBasePath() . $this->getIndexPath() . '/' . self::GET_TOKEN_END_POINT;
     }
 
     /**
