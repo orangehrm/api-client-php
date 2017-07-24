@@ -22,12 +22,26 @@ namespace Orangehrm\API;
 class HTTPResponse
 {
 
+    /**
+     * @var null
+     */
     private $response = null;
 
+    /**
+     * @var int
+     */
     private $statusCode = 200;
 
-    private $result = null;
+    /**
+     * @var array
+     */
+    private $result = array();
 
+    /**
+     * HTTPResponse constructor.
+     *
+     * @param $response
+     */
     public function __construct($response)
     {
         $this->response = $response;
@@ -86,6 +100,9 @@ class HTTPResponse
         }
     }
 
+    /**
+     * @return bool
+     */
     public function hasError()
     {
 
@@ -100,6 +117,9 @@ class HTTPResponse
 
     }
 
+    /**
+     * @return array
+     */
     public function getError()
     {
 
