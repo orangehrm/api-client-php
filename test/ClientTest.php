@@ -31,7 +31,7 @@ class ClientTest extends PHPUnit_Framework_TestCase
     {
         //$this->client = new Client('https://api-sample-cs.orangehrm.com', 'testclient', 'testpass');
         $this->client = new Client('http://orangehrm.dev', 'testclient', 'testpass');
-        $this->testEmployee = $this->addTestEmployee('Mike','Combas');
+        $this->testEmployee = $this->addTestEmployee('John','Doe');
 
     }
 
