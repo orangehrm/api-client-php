@@ -29,8 +29,8 @@ class ClientTest extends PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        //$this->client = new Client('https://api-sample-cs.orangehrm.com', 'testclient', 'testpass');
-        $this->client = new Client('http://orangehrm.dev', 'testclient', 'testpass');
+        $this->client = new Client('https://api-sample-cs.orangehrm.com', 'testclient', 'testpass');
+        //$this->client = new Client('http://orangehrm.dev', 'testclient', 'testpass');
         $this->testEmployee = $this->addTestEmployee('John','Doe');
 
     }
