@@ -1,7 +1,6 @@
 OrangeHRM API Client (PHP)
 ===========
 
- [![Travis Test](https://img.shields.io/travis/orangehrm/api-client-php/master.svg)](https://travis-ci.org/orangehrm/api-client-php) 
 
 A PHP client lib for the [OrangeHRM API](https://orangehrm.github.io/orangehrm-api-doc/)
 
