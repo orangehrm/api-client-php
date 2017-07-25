@@ -1,10 +1,7 @@
 language: php
-php:
-  - '5.6'
+php: 5.6
 sudo: required
 dist: trusty
-group: edge
-
 before_install:
   - uname -a
   - php --version
@@ -13,7 +10,7 @@ before_install:
 install:
   - composer install
 script:
-  - vendor/bin/phpunit
-
+    - head /proc/sys/fs/aio*
+    - ps -jef --forest
 notifications:
-  email: true
+    email: never
