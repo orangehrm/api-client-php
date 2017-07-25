@@ -68,7 +68,7 @@ class ClientTest extends PHPUnit_Framework_TestCase
 
     public function testGet202StatusCode()
     {
-        $request = new HTTPRequest('leave/search?fromDate="2005-11-30"&toDate="2005-12-30"');
+        $request = new HTTPRequest('leave/search?fromDate="2005-11-30"&toDate="2005-13-12"');
         $result = $this->client->get($request);
 
         $this->assertTrue($result->hasError());
