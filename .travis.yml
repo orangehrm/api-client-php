@@ -10,7 +10,6 @@ before_install:
 install:
   - composer install
 script:
-    - head /proc/sys/fs/aio*
-    - ps -jef --forest
+    - vendor/bin/phpunit
 notifications:
     email: never
