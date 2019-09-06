@@ -22,7 +22,7 @@
   },
   "extra": {
     "branch-alias": {
-      "dev-master": "1.2.3"
+      "dev-master": "1.2.4-dev"
     }
   },
   "license": [
