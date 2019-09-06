@@ -20,6 +20,11 @@
       "Orangehrm\\": "lib/"
     }
   },
+  "extra": {
+    "branch-alias": {
+      "dev-master": "1.2.4"
+    }
+  },
   "license": [
        "GPL-2.0"
     ]
